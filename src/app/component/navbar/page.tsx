@@ -7,6 +7,7 @@ import { ModeToggle } from '@/components/page';
 import LoginIcon from '@mui/icons-material/Login';
 import PersonAddIcon from '@mui/icons-material/PersonAdd';
 import BadgeAvatars from '@/app/profile/page';
+import { useRouter } from 'next/navigation';
 const StyledNavbar = styled('div')({
   display: 'flex',
   justifyContent: 'space-between',
@@ -48,6 +49,8 @@ const WelcomeText = styled('div')({
 });
 
 const Navbar = () => {
+  
+  const router = useRouter();
   const [isLoggedIn, setIsLoggedIn] = useState<boolean>(false);
   const [userEmail, setUserEmail] = useState<string | null>(null);
   const [userImage, setUserImage] = useState<string | null>(null);
@@ -55,6 +58,7 @@ const Navbar = () => {
   useEffect(() => {
     const formData = localStorage.getItem('formData');
     if (formData) {
+      router.push('/productAPI');
       const parsedData = JSON.parse(formData);
       setUserEmail(parsedData.email);
       setIsLoggedIn(true);
@@ -64,6 +68,7 @@ const Navbar = () => {
     if (storedImageUrl) {
       setUserImage(storedImageUrl);
     }
+
   }, []);
 
   return (
