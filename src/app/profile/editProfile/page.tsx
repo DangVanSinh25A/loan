@@ -23,6 +23,7 @@ const EditProfile: React.FC<EditProfileProps> = ({ formDataProp, onUpdateProfile
         parsedFormData.urlImage = storedImage;
       }
       setFormData(parsedFormData);
+      
     } else if (storedImage) {
       setFormData(prevState => ({
         ...prevState!,
@@ -61,13 +62,25 @@ const EditProfile: React.FC<EditProfileProps> = ({ formDataProp, onUpdateProfile
     if (!formData) return;
 
     const { name, email, password, phone, address } = formData;
+    const storedFormDatas = JSON.parse(localStorage.getItem('users') || '[]');
+    const matchingUserIndex = storedFormDatas.findIndex((user: { email: string; password: string; address: string; name: string; phone: string; urlImage: string;}) => 
+      user.email === formData.email && user.password === formData.password
+    );
+   
+      storedFormDatas[matchingUserIndex] = {
+        ...storedFormDatas[matchingUserIndex],
+        address: formData.address,
+        name: formData.name,
+        phone: formData.phone,
+        urlImage: formData.urlImage
+      };
+
+    localStorage.setItem('users', JSON.stringify(storedFormDatas));
 
     if (!name || !email || !password || !phone || !address) {
       setError('Tất cả các trường đều phải được điền.');
       return;
     }
-
-    // Call onUpdateProfile to update profile data
     onUpdateProfile(formData);
 
     localStorage.setItem('formData', JSON.stringify(formData));
